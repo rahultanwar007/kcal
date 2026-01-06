@@ -1,4 +1,4 @@
-import { PrismaClient } from "../app/generated/prisma/client"
+import { PrismaClient } from "../prisma/generated/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 
 const globalForPrisma = globalThis as unknown as {
@@ -9,7 +9,7 @@ export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
     adapter: new PrismaPg({
-      connectionString: process.env.PRISMA_DATABASE_URL!,
+      connectionString: process.env.DATABASE_URL!,
     }),
     transactionOptions: {
       maxWait: 5_000,
