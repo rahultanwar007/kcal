@@ -2,7 +2,7 @@ import type {
     FoodItem,
     MacroNutrients,
     MicroNutrients,
-  } from "@/app/generated/prisma/client"
+  } from "../prisma/generated/client"
   
   export type FoodWithNutrition = FoodItem & {
     macros: MacroNutrients | null
