@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+//------------------------------------- MODELS -------------------------------------------------
+
+model FoodItem {
+  id        String   @id @default(cuid())
+  name      String
+  category  FoodCategory
+  unit      String   @default("g") // future-proof
+
+  macros    MacroNutrients?
+  micros    MicroNutrients?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MacroNutrients {
+  id        String  @id @default(cuid())
+  foodId   String  @unique
+  food     FoodItem @relation(fields: [foodId], references: [id])
+
+  calories Float
+  protein  Float
+  carbs    Float
+  fat      Float
+  fiber    Float?
+
+  createdAt DateTime @default(now())
+}
+
+model MicroNutrients {
+  id        String  @id @default(cuid())
+  foodId   String  @unique
+  food     FoodItem @relation(fields: [foodId], references: [id])
+
+  iron        Float?
+  calcium    Float?
+  magnesium  Float?
+  zinc       Float?
+  potassium  Float?
+  sodium     Float?
+
+  vitaminA   Float?
+  vitaminC   Float?
+  vitaminD   Float?
+  vitaminB12 Float?
+
+  omega3     Float?
+
+  createdAt DateTime @default(now())
+}
+
+model RDAReference {
+  id       String @id @default(cuid())
+  nutrient String @unique
+  unit     String
+  value    Float
+}
+
+
+//----------------------------------------------------------
+
+enum FoodCategory {
+  PROTEIN
+  CARB
+  FAT
+  VEGETABLE
+  FRUIT
+  SUPPLEMENT
+}
